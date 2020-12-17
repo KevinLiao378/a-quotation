@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block app_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css">
+{% endblock %}
+
+{% block app_title %}随机获取一条游戏英雄语录{% endblock %}
+
+{% block app_content %}
+    <blockquote>
+        <p id="quotation"></p>
+        <footer>
+            <p id="source">——<span id="author"></span>·<span id="game_label"></span></p>
+        </footer>
+    </blockquote>
+    <button>换一个</button>
+
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+        function get_a_quotation() {
+            $.get("/api/quotation", function(data,status){
+                $("#quotation").text(data.content);
+                $("#author").text(data.author);
+                $("#game_label").text(data.source);
+            });
+        }
+        $(document).ready(function(){
+            $("button").click(function(){
+                get_a_quotation();
+            });
+            get_a_quotation();
+        });
+    </script>
+{% endblock %}

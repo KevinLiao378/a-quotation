@@ -1,0 +1,25 @@
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-family: "Microsoft YaHei",sans-serif;
+}
+#quotation {
+  font-size: 2rem;
+  line-height: 1.2;
+  hanging-punctuation: first;
+}
+#source {
+  font-size: 1.4rem;
+  color: rgba(0,0,0,0.6);
+}
+button {
+  display: block;
+  padding: .5rem;
+  outline: none;
+  font-size: .8rem;
+  background: none;
+  border: 1px solid rgba(0,0,0,0.6);
+}

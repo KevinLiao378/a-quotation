@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    {% block app_head %}
+    {% endblock %}
+    <title>
+    {% block app_title %} {% if title %} {{ title }} {% else %} A Quotation {% endif %} {% endblock %}
+    </title>
+</head>
+<body>
+    {% block app_content %}
+    {% endblock %}
+    {% block app_script %}
+    {% endblock %}
+</body>
+</html>
