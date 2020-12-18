@@ -1,0 +1,29 @@
+{% extends 'admin/master.html' %}
+{% include "security/_messages.html" %}
+{% block body %}
+{{ super() }}
+<div class="card">
+    <div class="card-body">
+        <blockquote class="blockquote mb-0">
+            <p id="quotation">--</p>
+            <footer class="blockquote-footer"><span id="author"></span> <cite id="game_label" title="Source Title"></cite></footer>
+        </blockquote>
+    </div>
+</div>
+{% endblock body %}
+
+{% block tail_js %}
+{{ super() }}
+<script>
+    function get_a_quotation() {
+        $.get("/api/quotation", function(data,status){
+            $("#quotation").text(data.content);
+            $("#author").text(data.author);
+            $("#game_label").text(data.source);
+        });
+    }
+    $(document).ready(function(){
+        get_a_quotation();
+    });
+</script>
+{% endblock tail_js %}
