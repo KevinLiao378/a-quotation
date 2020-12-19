@@ -41,13 +41,15 @@ class MyHomeView(AdminIndexView):
 
 
 class MyModelView(sqla.ModelView):
+    # 不能删除操作
+    can_delete = False
     """
     自定义后台管理视图，进行权限控制
     """
     def is_accessible(self):
         return (current_user.is_active and
                 current_user.is_authenticated and
-                current_user.has_role('superuser')
+                current_user.has_role('user')
                 )
 
     def _handle_view(self, name, **kwargs):
@@ -63,15 +65,22 @@ class MyModelView(sqla.ModelView):
                 return redirect(url_for('security.login', next=request.url))
 
 
-class UserModelView(MyModelView):
-    # 不能删除操作
-    can_delete = False
+class MySuperUserModelView(sqla.ModelView):
+    """
+    自定义后台管理视图，进行权限控制
+    """
+    def is_accessible(self):
+        return (current_user.is_active and
+                current_user.is_authenticated and
+                current_user.has_role('superuser')
+                )
+
+
+class UserModelView(MySuperUserModelView):
     # 不显示密码项
     column_exclude_list = ['password', ]
 
 
-class UserRoleModelView(MyModelView):
+class UserRoleModelView(MySuperUserModelView):
     # 不能删除操作
     can_delete = False
-    # 不能编辑操作
-    can_edit = False
