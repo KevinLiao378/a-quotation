@@ -1,10 +1,15 @@
 body {
+  background-color: #393737;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   font-family: "Microsoft YaHei",sans-serif;
+  color: #f1fcfd;
 }
 #quotation {
   font-size: 2rem;
@@ -13,13 +18,14 @@ body {
 }
 #source {
   font-size: 1.4rem;
-  color: rgba(0,0,0,0.6);
+  color: rgba(255,255,255,0.6);
 }
 button {
   display: block;
   padding: .5rem;
   outline: none;
   font-size: .8rem;
+  color: white;
   background: none;
-  border: 1px solid rgba(0,0,0,0.6);
+  border: 2px solid rgba(247,247,247,1);
 }

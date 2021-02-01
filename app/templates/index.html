@@ -22,6 +22,14 @@
                 $("#quotation").text(data.content);
                 $("#author").text(data.author);
                 $("#game_label").text(data.source);
+                get_wallpaper(data.source);
+            });
+        }
+        function get_wallpaper(tag_name) {
+            $.get("/api/wallpaper", {tag: tag_name}, function(data,status){
+                if(data.path !== undefined) {
+                    $('body').css('background-image', 'url(' + data.path + ')');
+                }
             });
         }
         $(document).ready(function(){
