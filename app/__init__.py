@@ -10,8 +10,9 @@ from flask_security import SQLAlchemyUserDatastore, Security
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin, helpers as admin_helpers
 from flask_babelex import Babel
+import flask_excel as excel
 
-from app.admin import MyHomeView, MyModelView, UserModelView, UserRoleModelView
+from app.admin import MyHomeView, MySuperUserModelView, UserModelView, DataManageView
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -42,6 +43,8 @@ def create_app(config_cls):
     migrate.init_app(app, db)
 
     babel.init_app(app)
+    # Excel 操作库
+    excel.init_excel(app)
 
     # 创建后台管理模块
     from app.models import Game, Hero, Quotation, User, Role
@@ -54,11 +57,12 @@ def create_app(config_cls):
         template_mode='bootstrap3'
     )
 
-    _admin.add_view(MyModelView(Game, db.session, name=u'游戏'))
-    _admin.add_view(MyModelView(Hero, db.session, name=u'英雄角色'))
-    _admin.add_view(MyModelView(Quotation, db.session, name=u'语录'))
+    _admin.add_view(DataManageView(name=u'导入导出管理', endpoint='manage'))
+    _admin.add_view(MySuperUserModelView(Game, db.session, name=u'游戏'))
+    _admin.add_view(MySuperUserModelView(Hero, db.session, name=u'英雄角色'))
+    _admin.add_view(MySuperUserModelView(Quotation, db.session, name=u'语录'))
     _admin.add_view(UserModelView(User, db.session, name=u'用户管理'))
-    _admin.add_view(UserRoleModelView(Role, db.session, name=u'用户角色管理'))
+    _admin.add_view(MySuperUserModelView(Role, db.session, name=u'用户角色管理'))
 
     # 创建权限控制实例
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)
