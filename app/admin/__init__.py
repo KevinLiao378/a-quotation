@@ -74,26 +74,33 @@ class DataManageView(BaseView):
     @expose('/', methods=['GET', 'POST'])
     def index(self):
         if request.method == 'POST':
+            select_game_name = request.form.get('game_select')
             from app.models import Game, Hero, Quotation
             from app import db
 
             def hero_init_func(row):
-                select_game_name = request.form.get('game_select')
                 g = Game.query.filter_by(name=select_game_name).first()
-                hero = Hero(name=row['name'], game_id=g.id)
-                return hero
+                hero_name = row.get('name')
+                if g is not None and hero_name is not None:
+                    hero = Hero(name=hero_name, game_id=g.id)
+                    return hero
+                return None
 
             def quotation_init_func(row):
-                hero = Hero.query.filter_by(name=row['hero_name']).first()
-                quotation = Quotation(content=row['content'], audio_url=row['audio_url'], hero_id=hero.id)
-                return quotation
+                hero = Hero.query.filter_by(name=row.get('hero_name')).first()
+                q_content = row.get('content')
+                q_audio_url = row.get('audio_url', '')
+                if hero is not None and q_content is not None:
+                    quotation = Quotation(content=q_content, audio_url=q_audio_url, hero_id=hero.id)
+                    return quotation
+                return None
 
             request.save_book_to_database(
                 field_name='file', session=db.session,
                 tables=[Hero, Quotation],
                 initializers=[hero_init_func, quotation_init_func]
             )
-            flash("导入成功！", 'success')
+            flash(u'导入成功！', 'success')
             return redirect(url_for('manage.index'))
         else:
             from app.models import Game
