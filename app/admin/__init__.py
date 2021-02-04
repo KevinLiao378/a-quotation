@@ -6,10 +6,12 @@
     :time: 2020/12/18
     :contact: cooltut@hotmail.com
 """
+import pyexcel
 from flask import url_for, redirect, request, abort, flash
 from flask_admin import AdminIndexView, expose, BaseView
 from flask_admin.contrib import sqla
 from flask_security import current_user
+import flask_excel as excel
 
 
 class MyHomeView(AdminIndexView):
@@ -102,6 +104,24 @@ class DataManageView(BaseView):
                     options.append(game.name)
             return self.render('admin/manage.html', options=options)
 
+    @expose('/export')
+    def export(self):
+        """
+        Excel 模板下载
+        :return:
+        """
+        excel_data = {
+            'heroes': [
+                ['name']
+            ],
+            'quotations': [
+                ['content', 'audio_url', 'hero_name']
+            ]
+        }
+        book = pyexcel.get_book(bookdict=excel_data)
+        return excel.make_response(book, file_type='xls',
+                                   file_name='data_template')
+
 
 class MySuperUserModelView(sqla.ModelView):
     """
@@ -144,4 +164,3 @@ class MySuperUserModelView(sqla.ModelView):
 class UserModelView(MySuperUserModelView):
     # 不显示密码项
     column_exclude_list = ['password', ]
-
